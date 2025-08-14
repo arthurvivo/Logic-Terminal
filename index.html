@@ -4,59 +4,37 @@
     <meta charset="UTF-8">
     <title>TERMINAL</title>
     <style>
-        /* Fundo preto com efeito de scanlines */
         body {
             background-color: black;
             color: #00ff00;
-            font-family: 'Courier New', monospace;
+            font-family: 'Courier New', monospace; /* mesma fonte do campo de senha */
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             margin: 0;
-            position: relative;
-            overflow: hidden;
         }
 
-        /* Efeito de linhas horizontais */
-        body::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                rgba(0, 255, 0, 0.05) 0px,
-                rgba(0, 255, 0, 0.05) 1px,
-                transparent 2px
-            );
-            pointer-events: none;
+        /* Texto principal e subtítulo no mesmo estilo do campo de senha */
+        h1, h2 {
+            font-size: 36px;
+            margin: 10px 0;
+            color: #00ff00;
         }
 
-        h1 {
-            font-size: 72px;
-            text-shadow: 0 0 15px #00ff00;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-            animation: piscar 2s infinite;
-        }
         img {
             max-width: 20%;
-            border: auto;
-            box-shadow: none;
+            height: auto;
             margin-bottom: 20px;
-            animation: levePiscar 3s infinite;
+            border: none;
+            box-shadow: none;
         }
-        h2 {
-            font-size: 28px;
-            text-shadow: 0 0 10px #00ff00;
-            margin-bottom: 40px;
-            animation: piscar 3s infinite;
-        }
+
+        /* Barra simples de digitação */
         input {
             background-color: black;
             border: none;
-            border-bottom: 1px solid #00ff00;
+            border-bottom: 2px solid #00ff00;
             color: #00ff00;
             font-family: 'Courier New', monospace;
             font-size: 20px;
@@ -64,6 +42,7 @@
             width: 220px;
             outline: none;
         }
+
         button {
             background-color: black;
             border: 1px solid #00ff00;
@@ -74,32 +53,23 @@
             margin-left: 10px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #003300;
         }
+
         #mensagem {
             margin-top: 20px;
             font-size: 18px;
-            text-shadow: 0 0 5px #00ff00;
             min-height: 20px;
-            animation: levePiscar 1.5s infinite;
-        }
-
-        /* Animações */
-        @keyframes piscar {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0.8; }
-        }
-        @keyframes levePiscar {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.9; }
+            color: #00ff00;
         }
     </style>
 </head>
 <body>
     <h1>TERMINAL</h1>
 
-    <!-- Troque pelo nome do arquivo no seu repositório ou por um link da internet -->
+    <!-- Troque pelo nome do arquivo no seu repositório ou link da internet -->
     <img src="Terminal.jpg" alt="Imagem do Terminal">
 
     <h2>Dia 0</h2>
@@ -119,11 +89,17 @@
                 msg.textContent = "Acesso concedido...";
                 setTimeout(() => {
                     msg.textContent = "Carregando...";
-                    // Aqui pode trocar de página se quiser:
+                    // Aqui pode redirecionar para outra página se quiser
                     // window.location.href = "outra_pagina.html";
                 }, 1500);
             } else {
                 msg.textContent = "Senha incorreta.";
+            }
+        });
+    </script>
+</body>
+</html>
+
             }
         });
     </script>
