@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>TERMINAL</title>
     <style>
+        /* Fundo preto com efeito de scanlines */
         body {
             background-color: black;
             color: #00ff00;
@@ -11,34 +12,57 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            padding: 20px;
             margin: 0;
+            position: relative;
+            overflow: hidden;
         }
+
+        /* Efeito de linhas horizontais */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 0, 0.05) 0px,
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+
         h1 {
-            font-size: 64px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #00ff00;
+            font-size: 72px;
+            text-shadow: 0 0 15px #00ff00;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            animation: piscar 2s infinite;
+        }
+        img {
+            max-width: 80%;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            margin-bottom: 20px;
+            animation: levePiscar 3s infinite;
         }
         h2 {
             font-size: 28px;
+            text-shadow: 0 0 10px #00ff00;
             margin-bottom: 40px;
-            text-shadow: 0 0 5px #00ff00;
-        }
-        .painel {
-            border: 2px solid #00ff00;
-            padding: 20px;
-            background-color: rgba(0, 255, 0, 0.05);
-            box-shadow: 0 0 20px #00ff00;
+            animation: piscar 3s infinite;
         }
         input {
             background-color: black;
-            border: 1px solid #00ff00;
+            border: none;
+            border-bottom: 1px solid #00ff00;
             color: #00ff00;
             font-family: 'Courier New', monospace;
-            font-size: 18px;
+            font-size: 20px;
             padding: 5px;
-            width: 200px;
+            width: 220px;
+            outline: none;
         }
         button {
             background-color: black;
@@ -57,25 +81,51 @@
             margin-top: 20px;
             font-size: 18px;
             text-shadow: 0 0 5px #00ff00;
+            min-height: 20px;
+            animation: levePiscar 1.5s infinite;
+        }
+
+        /* Animações */
+        @keyframes piscar {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.8; }
+        }
+        @keyframes levePiscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
         }
     </style>
 </head>
 <body>
     <h1>TERMINAL</h1>
+
+    <!-- Troque pelo nome do arquivo no seu repositório ou por um link da internet -->
+    <img src="SUA_IMAGEM_AQUI.jpg" alt="Imagem do Terminal">
+
     <h2>Dia 0</h2>
-    <div class="painel">
+
+    <div>
         <input type="password" id="senha" placeholder="Digite a senha">
-        <button onclick="verificarSenha()">Acessar</button>
+        <button id="btnAcessar">Acessar</button>
         <div id="mensagem"></div>
     </div>
 
     <script>
-        function verificarSenha() {
-            const senha = document.getElementById('senha').value;
+        document.getElementById("btnAcessar").addEventListener("click", function() {
+            const senha = document.getElementById('senha').value.trim();
             const msg = document.getElementById('mensagem');
+            
             if (senha === "Teste") {
-                msg.textContent = "Acesso concedido.";
+                msg.textContent = "Acesso concedido...";
+                setTimeout(() => {
+                    msg.textContent = "Carregando...";
+                    // Aqui pode trocar de página se quiser:
+                    // window.location.href = "outra_pagina.html";
+                }, 1500);
             } else {
                 msg.textContent = "Senha incorreta.";
             }
-        }
+        });
+    </script>
+</body>
+</html>
