@@ -4,22 +4,50 @@
     <meta charset="UTF-8">
     <title>TERMINAL</title>
     <style>
+        /* Corpo do terminal */
         body {
             background-color: black;
             color: #00ff00;
-            font-family: 'Courier New', monospace; /* mesma fonte do campo de senha */
+            font-family: 'Courier New', monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             margin: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Texto principal e subtítulo no mesmo estilo do campo de senha */
-        h1, h2 {
-            font-size: 36px;
-            margin: 10px 0;
-            color: #00ff00;
+        /* Scanlines */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 0, 0.05) 0px,
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+
+        /* Piscadinhas */
+        @keyframes piscar {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.8; }
+        }
+        @keyframes levePiscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+
+        h1 {
+            font-size: 72px;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            animation: piscar 2s infinite;
         }
 
         img {
@@ -28,9 +56,16 @@
             margin-bottom: 20px;
             border: none;
             box-shadow: none;
+            animation: levePiscar 3s infinite;
         }
 
-        /* Barra simples de digitação */
+        h2 {
+            font-size: 36px;
+            font-weight: normal; /* sem negrito */
+            margin-bottom: 40px;
+            animation: levePiscar 3s infinite;
+        }
+
         input {
             background-color: black;
             border: none;
@@ -43,63 +78,62 @@
             outline: none;
         }
 
-        button {
-            background-color: black;
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            font-size: 18px;
-            padding: 5px 15px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #003300;
-        }
-
         #mensagem {
             margin-top: 20px;
             font-size: 18px;
             min-height: 20px;
             color: #00ff00;
+            animation: levePiscar 2s infinite;
         }
     </style>
 </head>
 <body>
     <h1>TERMINAL</h1>
-
-    <!-- Troque pelo nome do arquivo no seu repositório ou link da internet -->
     <img src="Terminal.jpg" alt="Imagem do Terminal">
-
     <h2>Dia 0</h2>
 
-    <div>
-        <input type="password" id="senha" placeholder="Digite a senha">
-        <button id="btnAcessar">Acessar</button>
-        <div id="mensagem"></div>
-    </div>
+    <input type="text" id="senha" autofocus autocomplete="off">
+    <div id="mensagem"></div>
 
     <script>
-        document.getElementById("btnAcessar").addEventListener("click", function() {
-            const senha = document.getElementById('senha').value.trim();
-            const msg = document.getElementById('mensagem');
-            
-            if (senha === "Teste") {
-                msg.textContent = "Acesso concedido...";
-                setTimeout(() => {
-                    msg.textContent = "Carregando...";
-                    // Aqui pode redirecionar para outra página se quiser
-                    // window.location.href = "outra_pagina.html";
-                }, 1500);
-            } else {
-                msg.textContent = "Senha incorreta.";
-            }
-        });
-    </script>
-</body>
-</html>
+        const input = document.getElementById("senha");
+        const msg = document.getElementById("mensagem");
+        const maxTentativas = 3;
+        const bloqueioHoras = 5;
 
+        // Verifica se existe bloqueio no localStorage
+        let bloqueio = localStorage.getItem("bloqueio");
+        let tentativas = Number(localStorage.getItem("tentativas")) || 0;
+
+        if (bloqueio && Date.now() < Number(bloqueio)) {
+            msg.textContent = `Tentativas esgotadas. Tente novamente mais tarde.`;
+            input.disabled = true;
+        }
+
+        input.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                let valor = input.value.trim();
+                if (bloqueio && Date.now() < Number(bloqueio)) {
+                    return;
+                }
+
+                if (valor.toLowerCase() === "trem") {
+                    msg.textContent = "Acesso concedido...";
+                    input.disabled = true;
+                } else {
+                    tentativas++;
+                    if (tentativas >= maxTentativas) {
+                        const desbloqueio = Date.now() + bloqueioHoras * 60 * 60 * 1000;
+                        localStorage.setItem("bloqueio", desbloqueio);
+                        msg.textContent = `Tentativas esgotadas. Tente novamente em ${bloqueioHoras} horas.`;
+                        input.disabled = true;
+                    } else {
+                        msg.textContent = `Senha incorreta. Tentativa ${tentativas}/${maxTentativas}`;
+                    }
+                    localStorage.setItem("tentativas", tentativas);
+                }
+
+                input.value = "";
             }
         });
     </script>
