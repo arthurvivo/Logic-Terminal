@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -32,7 +32,6 @@
             pointer-events: none;
         }
 
-        /* Animações */
         @keyframes piscar {
             0%, 49% { opacity: 1; }
             50%, 100% { opacity: 0.8; }
@@ -86,24 +85,74 @@
             animation: levePiscar 2s infinite;
         }
 
-         #timer {
-        font-size: 20px;
-        color: red;
-        margin-top: 10px;
-        position: relative; /* garante que fique visível */
-        z-index: 2;         /* acima de outros elementos */
-    }
+        #timer {
+            font-size: 20px;
+            color: red;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* BIOS */
+        #bios {
+            display: none;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #00ff00;
+            padding: 10px;
+        }
+
+        .bios-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: piscar 2s infinite;
+        }
+
+        .bios-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bios-menu li {
+            padding: 5px;
+        }
+
+        .selected {
+            background-color: #003300;
+        }
+
+        .bios-content {
+            margin-top: 10px;
+            border-top: 1px solid #00ff00;
+            padding-top: 5px;
+            min-height: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>TERMINAL</h1>
-    <img src="Terminal.jpg" alt="Imagem do Terminal">
-    <h2>Dia 0</h2>
+    <!-- TELA LOGIN -->
+    <div id="login">
+        <h1>TERMINAL</h1>
+        <img src="Terminal.jpg" alt="Imagem do Terminal">
+        <h2>Dia 0</h2>
+        <input type="text" id="senha" autofocus autocomplete="off">
+        <div id="mensagem"></div>
+        <div id="timer"></div>
+    </div>
 
-    <input type="text" id="senha" autofocus autocomplete="off">
-    <div id="mensagem"></div>
-    <div id="timer"></div>
+    <!-- TELA BIOS -->
+    <div id="bios">
+        <div class="bios-title">=== SISTEMA DE CONTROLE ===</div>
+        <ul class="bios-menu">
+            <li class="selected">Contestantes</li>
+            <li>Terminal</li>
+        </ul>
+        <div class="bios-content" id="bios-content">
+            Pressione ↑ ou ↓ para navegar, Enter para selecionar.
+        </div>
+    </div>
 
     <script>
         const senhaCorreta = ["pupa", "crisálida"];
@@ -113,10 +162,12 @@
         const maxTentativas = 4;
         const bloqueioMs = 90 * 60 * 1000; // 1h30
 
+        const loginDiv = document.getElementById("login");
+        const biosDiv = document.getElementById("bios");
+
         let tentativas = Number(localStorage.getItem("tentativas")) || maxTentativas;
         let bloqueio = Number(localStorage.getItem("bloqueio")) || null;
 
-        // Função para atualizar contador
         function atualizarTimer() {
             const agora = Date.now();
             const restante = bloqueio - agora;
@@ -136,7 +187,6 @@
             requestAnimationFrame(atualizarTimer);
         }
 
-        // Se estiver bloqueado ao entrar
         if (bloqueio && Date.now() < bloqueio) {
             input.disabled = true;
             atualizarTimer();
@@ -150,7 +200,11 @@
 
                 if (senhaCorreta.includes(valor)) {
                     msg.textContent = "Acesso concedido...";
-                    input.disabled = true;
+                    setTimeout(() => {
+                        loginDiv.style.display = "none";
+                        biosDiv.style.display = "block";
+                        iniciarBios();
+                    }, 1000);
                 } else {
                     tentativas--;
                     localStorage.setItem("tentativas", tentativas);
@@ -170,7 +224,6 @@
             }
         });
 
-        // Resetar tentativas com L
         document.addEventListener("keydown", function(e) {
             if (e.key.toLowerCase() === "l" && document.activeElement !== input) {
                 tentativas = maxTentativas;
@@ -183,6 +236,35 @@
                 setTimeout(() => msg.textContent = "", 2000);
             }
         });
+
+        // ---- BIOS ----
+        function iniciarBios() {
+            const menuItems = document.querySelectorAll(".bios-menu li");
+            let selectedIndex = 0;
+            const biosContent = document.getElementById("bios-content");
+
+            document.addEventListener("keydown", function(e) {
+                if (biosDiv.style.display === "block") {
+                    if (e.key === "ArrowDown") {
+                        menuItems[selectedIndex].classList.remove("selected");
+                        selectedIndex = (selectedIndex + 1) % menuItems.length;
+                        menuItems[selectedIndex].classList.add("selected");
+                    }
+                    if (e.key === "ArrowUp") {
+                        menuItems[selectedIndex].classList.remove("selected");
+                        selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
+                        menuItems[selectedIndex].classList.add("selected");
+                    }
+                    if (e.key === "Enter") {
+                        if (selectedIndex === 0) {
+                            biosContent.textContent = "Lista de Contestantes: [A definir]";
+                        } else if (selectedIndex === 1) {
+                            biosContent.textContent = "Terminal: Digite comandos (em breve)";
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
