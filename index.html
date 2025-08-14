@@ -1,27 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Site</title>
+    <title>TERMINAL</title>
     <style>
         body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
+            background-color: black;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
         h1 {
-            color: blue;
-            font-size: 48px;
+            font-size: 64px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff00;
         }
-        p {
-            color: darkred;
-            font-size: 20px;
+        h2 {
+            font-size: 28px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        .painel {
+            border: 2px solid #00ff00;
+            padding: 20px;
+            background-color: rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 20px #00ff00;
+        }
+        input {
+            background-color: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            padding: 5px;
+            width: 200px;
+        }
+        button {
+            background-color: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            padding: 5px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #003300;
+        }
+        #mensagem {
+            margin-top: 20px;
+            font-size: 18px;
+            text-shadow: 0 0 5px #00ff00;
         }
     </style>
 </head>
 <body>
-    <h1>Olá, mundo!</h1>
-    <p>Este é o meu primeiro site no GitHub Pages 🎉</p>
-</body>
-</html>
+    <h1>TERMINAL</h1>
+    <h2>Dia 0</h2>
+    <div class="painel">
+        <input type="password" id="senha" placeholder="Digite a senha">
+        <button onclick="verificarSenha()">Acessar</button>
+        <div id="mensagem"></div>
+    </div>
+
+    <script>
+        function verificarSenha() {
+            const senha = document.getElementById('senha').value;
+            const msg = document.getElementById('mensagem');
+            if (senha === "Teste") {
+                msg.textContent = "Acesso concedido.";
+            } else {
+                msg.textContent = "Senha incorreta.";
+            }
+        }
