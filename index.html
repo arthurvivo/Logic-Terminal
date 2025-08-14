@@ -100,6 +100,23 @@
             max-width: 600px;
             border: 2px solid #00ff00;
             padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Scanlines na BIOS */
+        #bios::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 0, 0.05) 0px,
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 2px
+            );
+            pointer-events: none;
         }
 
         .bios-title {
@@ -136,9 +153,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center; 
-            height: 100vh; /* ocupa a altura total da tela */
+            height: 100vh;
         }
-
     </style>
 </head>
 <body>
@@ -158,6 +174,7 @@
         <ul class="bios-menu">
             <li class="selected">Contestantes</li>
             <li>Terminal</li>
+            <li>Informações</li>
         </ul>
         <div class="bios-content" id="bios-content">
             Pressione ↑ ou ↓ para navegar, Enter para selecionar.
@@ -270,6 +287,8 @@
                             biosContent.textContent = "Lista de Contestantes: [A definir]";
                         } else if (selectedIndex === 1) {
                             biosContent.textContent = "Terminal: Digite comandos (em breve)";
+                        } else if (selectedIndex === 2) {
+                            biosContent.textContent = "Informações do sistema: [Em construção]";
                         }
                     }
                 }
@@ -278,3 +297,4 @@
     </script>
 </body>
 </html>
+
