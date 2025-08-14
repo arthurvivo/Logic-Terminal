@@ -86,10 +86,13 @@
             animation: levePiscar 2s infinite;
         }
 
-        #timer {
-            font-size: 20px;
-            color: red;
-            margin-top: 10px;
+         #timer {
+        font-size: 20px;
+        color: red;
+        margin-top: 10px;
+        position: relative; /* garante que fique visível */
+        z-index: 2;         /* acima de outros elementos */
+    }
         }
     </style>
 </head>
