@@ -2,123 +2,269 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema Seguro</title>
+    <title>TERMINAL</title>
     <style>
         body {
             background-color: black;
             color: #00ff00;
-            font-family: monospace;
-            margin: 0;
-            height: 100vh;
+            font-family: 'Courier New', monospace;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            padding: 20px;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Tela de login centralizada */
-        #login {
-            text-align: center;
+        /* Scanlines */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 255, 0, 0.05) 0px,
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+
+        @keyframes piscar {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.8; }
+        }
+        @keyframes levePiscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+
+        h1 {
+            font-size: 72px;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            animation: piscar 2s infinite;
+        }
+
+        img {
+            max-width: 20%;
+            height: auto;
+            margin-bottom: 10px;
+            border: none;
+            box-shadow: none;
+            animation: levePiscar 3s infinite;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: normal;
+            margin-bottom: 40px;
+            animation: levePiscar 3s infinite;
         }
 
         input {
             background-color: black;
+            border: none;
+            border-bottom: 2px solid #00ff00;
             color: #00ff00;
-            border: 1px solid #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
             padding: 5px;
-            font-family: monospace;
+            width: 220px;
+            outline: none;
+            text-align: center;
         }
 
-        button {
-            background-color: black;
+        #mensagem {
+            margin-top: 20px;
+            font-size: 18px;
+            min-height: 20px;
             color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 5px;
-            cursor: pointer;
+            animation: levePiscar 2s infinite;
         }
 
-        /* Centraliza apenas a tela de login */
-        #login {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh; /* ocupa a tela inteira */
+        #timer {
+            font-size: 20px;
+            color: red;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
         }
 
-
-        /* Estilo BIOS */
+        /* BIOS */
         #bios {
             display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            padding: 20px;
-            box-sizing: border-box;
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid #00ff00;
+            padding: 10px;
         }
 
-        .menu-option {
-            padding: 5px 0;
+        .bios-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: piscar 2s infinite;
+        }
+
+        .bios-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bios-menu li {
+            padding: 5px;
         }
 
         .selected {
-            background-color: #00ff00;
-            color: black;
+            background-color: #003300;
+        }
+
+        .bios-content {
+            margin-top: 10px;
+            border-top: 1px solid #00ff00;
+            padding-top: 5px;
+            min-height: 50px;
         }
     </style>
 </head>
 <body>
-    <!-- Tela de Login -->
+    <!-- TELA LOGIN -->
     <div id="login">
-        <h1>ACESSO RESTRITO</h1>
-        <input type="password" id="senha" placeholder="Digite a senha">
-        <br><br>
-        <button onclick="verificarSenha()">Entrar</button>
-        <p id="erro"></p>
+        <h1>TERMINAL</h1>
+        <img src="Terminal.jpg" alt="Imagem do Terminal">
+        <h2>Dia 0</h2>
+        <input type="text" id="senha" autofocus autocomplete="off">
+        <div id="mensagem"></div>
+        <div id="timer"></div>
     </div>
 
-    <!-- Tela BIOS -->
+    <!-- TELA BIOS -->
     <div id="bios">
-        <h2>=== SISTEMA BIOS ===</h2>
-        <div id="menu">
-            <div class="menu-option selected">Contestantes</div>
-            <div class="menu-option">Terminal</div>
+        <div class="bios-title">=== SISTEMA DE CONTROLE ===</div>
+        <ul class="bios-menu">
+            <li class="selected">Contestantes</li>
+            <li>Terminal</li>
+        </ul>
+        <div class="bios-content" id="bios-content">
+            Pressione ↑ ou ↓ para navegar, Enter para selecionar.
         </div>
     </div>
 
     <script>
-        const senhaCorreta = "1234"; // senha para teste
+        const senhaCorreta = ["pupa", "crisálida"];
+        const input = document.getElementById("senha");
+        const msg = document.getElementById("mensagem");
+        const timerDiv = document.getElementById("timer");
+        const maxTentativas = 4;
+        const bloqueioMs = 90 * 60 * 1000; // 1h30
+
         const loginDiv = document.getElementById("login");
         const biosDiv = document.getElementById("bios");
-        const erroP = document.getElementById("erro");
 
-        let currentOption = 0;
-        const menuOptions = document.getElementsByClassName("menu-option");
+        let tentativas = Number(localStorage.getItem("tentativas")) || maxTentativas;
+        let bloqueio = Number(localStorage.getItem("bloqueio")) || null;
 
-        function verificarSenha() {
-            const senha = document.getElementById("senha").value;
-            if (senha === senhaCorreta) {
-                loginDiv.style.display = "none";
-                document.body.style.justifyContent = "flex-start";
-                document.body.style.alignItems = "flex-start";
-                biosDiv.style.display = "flex";
-            } else {
-                erroP.textContent = "Senha incorreta.";
+        function atualizarTimer() {
+            const agora = Date.now();
+            const restante = bloqueio - agora;
+            if (restante <= 0) {
+                tentativas = maxTentativas;
+                localStorage.setItem("tentativas", tentativas);
+                localStorage.removeItem("bloqueio");
+                bloqueio = null;
+                timerDiv.textContent = "";
+                msg.textContent = "";
+                input.disabled = false;
+                return;
             }
+            const minutos = Math.floor(restante / 60000);
+            const segundos = Math.floor((restante % 60000) / 1000);
+            timerDiv.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
+            requestAnimationFrame(atualizarTimer);
         }
 
-        document.addEventListener("keydown", (event) => {
-            if (biosDiv.style.display === "flex") {
-                if (event.key === "ArrowDown") {
-                    menuOptions[currentOption].classList.remove("selected");
-                    currentOption = (currentOption + 1) % menuOptions.length;
-                    menuOptions[currentOption].classList.add("selected");
-                } else if (event.key === "ArrowUp") {
-                    menuOptions[currentOption].classList.remove("selected");
-                    currentOption = (currentOption - 1 + menuOptions.length) % menuOptions.length;
-                    menuOptions[currentOption].classList.add("selected");
+        if (bloqueio && Date.now() < bloqueio) {
+            input.disabled = true;
+            atualizarTimer();
+        }
+
+        input.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                if (bloqueio && Date.now() < bloqueio) return;
+
+                const valor = input.value.trim().toLowerCase();
+
+                if (senhaCorreta.includes(valor)) {
+                    msg.textContent = "Acesso concedido...";
+                    setTimeout(() => {
+                        loginDiv.style.display = "none";
+                        biosDiv.style.display = "block";
+                        iniciarBios();
+                    }, 1000);
+                } else {
+                    tentativas--;
+                    localStorage.setItem("tentativas", tentativas);
+                    if (tentativas > 0) {
+                        msg.textContent = tentativas === maxTentativas - 1
+                            ? "Senha incorreta."
+                            : `Senha incorreta, você só tem mais ${tentativas} tentativa${tentativas > 1 ? 's' : ''}`;
+                    } else {
+                        msg.textContent = "Tentativas esgotadas. Aguarde 1h30.";
+                        bloqueio = Date.now() + bloqueioMs;
+                        localStorage.setItem("bloqueio", bloqueio);
+                        input.disabled = true;
+                        atualizarTimer();
+                    }
                 }
+                input.value = "";
             }
         });
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key.toLowerCase() === "l" && document.activeElement !== input) {
+                tentativas = maxTentativas;
+                localStorage.setItem("tentativas", tentativas);
+                localStorage.removeItem("bloqueio");
+                bloqueio = null;
+                msg.textContent = "Tentativas resetadas.";
+                timerDiv.textContent = "";
+                input.disabled = false;
+                setTimeout(() => msg.textContent = "", 2000);
+            }
+        });
+
+        // ---- BIOS ----
+        function iniciarBios() {
+            const menuItems = document.querySelectorAll(".bios-menu li");
+            let selectedIndex = 0;
+            const biosContent = document.getElementById("bios-content");
+
+            document.addEventListener("keydown", function(e) {
+                if (biosDiv.style.display === "block") {
+                    if (e.key === "ArrowDown") {
+                        menuItems[selectedIndex].classList.remove("selected");
+                        selectedIndex = (selectedIndex + 1) % menuItems.length;
+                        menuItems[selectedIndex].classList.add("selected");
+                    }
+                    if (e.key === "ArrowUp") {
+                        menuItems[selectedIndex].classList.remove("selected");
+                        selectedIndex = (selectedIndex - 1 + menuItems.length) % menuItems.length;
+                        menuItems[selectedIndex].classList.add("selected");
+                    }
+                    if (e.key === "Enter") {
+                        if (selectedIndex === 0) {
+                            biosContent.textContent = "Lista de Contestantes: [A definir]";
+                        } else if (selectedIndex === 1) {
+                            biosContent.textContent = "Terminal: Digite comandos (em breve)";
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
