@@ -289,8 +289,28 @@
 
             const contestants = [
                 "Coralina","Antúan","Ludovico","Hector Bogey","Minnerva","Lindi Vicent","Luccie",
-                "Yua","Eri","Adelaide","James","Ravi","Orpioxius"
+                "Yua","Eri","Adelaide","James","Ravi Garcia Junior","Raimundo Miller","Alessa Olgimskaya","Orpioxious S. Cupre"
             ];
+            
+            function mostrarPerfil(nome) {
+                // gera o nome do arquivo da imagem a partir do primeiro nome
+                const imgNome = nome.split(" ")[0].toLowerCase() + ".png";
+            
+                biosContent.innerHTML = `
+                    <div class="profile">
+                        <div class="photo-box">
+                            <img src="${imgNome}" alt="Foto de ${nome}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <div>
+                            <p><strong>Nome:</strong> ${nome}</p>
+                            <p><strong>Informações:</strong> [A definir]</p>
+                            <p><strong>Objetivo:</strong> [A definir]</p>
+                            <p>(Pressione ESC para voltar)</p>
+                        </div>
+                    </div>
+                `;
+            }
+
 
             let inContestants = false;
             let contestantIndex = 0;
