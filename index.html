@@ -287,22 +287,32 @@
             let selectedIndex = 0;
             const biosContent = document.getElementById("bios-content");
 
-            const contestants = [
-                "Coralina","Antúan","Ludovico","Hector Bogey","Minnerva","Lindi Vicent","Luccie",
-                "Yua","Eri","Adelaide","James","Ravi Garcia Junior","Raimundo Miller","Alessa Olgimskaya","Orpioxious S. Cupre"
+                       const contestants = [
+                { nome: "Coralina", img: "coralina.png" },
+                { nome: "Antúan", img: "antuan.png" },
+                { nome: "Ludovico", img: "ludovico.png" },
+                { nome: "Hector Bogey", img: "hector.png" },
+                { nome: "Minnerva", img: "minnerva.png" },
+                { nome: "Lindi Vicent", img: "lindi.png" },
+                { nome: "Luccie", img: "luccie.png" },
+                { nome: "Yua", img: "yua.png" },
+                { nome: "Eri", img: "eri.png" },
+                { nome: "Adelaide", img: "adelaide.png" },
+                { nome: "James", img: "james.png" },
+                { nome: "Ravi Garcia Junior", img: "ravi.png" },
+                { nome: "Raimundo Miller", img: "raimundo.png" },
+                { nome: "Alessa Olgimskaya", img: "alessa.png" },
+                { nome: "Orpioxious S. Cupre", img: "orpixious.png" }
             ];
             
-            function mostrarPerfil(nome) {
-                // gera o nome do arquivo da imagem a partir do primeiro nome
-                const imgNome = nome.split(" ")[0].toLowerCase() + ".png";
-            
+            function mostrarPerfil(contestant) {
                 biosContent.innerHTML = `
                     <div class="profile">
                         <div class="photo-box">
-                            <img src="${imgNome}" alt="Foto de ${nome}" style="width:100%; height:100%; object-fit:cover;">
+                            <img src="${contestant.img}" alt="Foto de ${contestant.nome}" style="width:100%; height:100%; object-fit:cover;">
                         </div>
                         <div>
-                            <p><strong>Nome:</strong> ${nome}</p>
+                            <p><strong>Nome:</strong> ${contestant.nome}</p>
                             <p><strong>Informações:</strong> [A definir]</p>
                             <p><strong>Objetivo:</strong> [A definir]</p>
                             <p>(Pressione ESC para voltar)</p>
@@ -310,6 +320,7 @@
                     </div>
                 `;
             }
+
 
 
             let inContestants = false;
