@@ -300,18 +300,17 @@
             let selectedIndex = 0;
             const biosContent = document.getElementById("bios-content");
 
-            const contestants = [
+    const contestants = [
                 "Coralina","Antúan","Ludovico","Hector Bogey","Minnerva","Lindi Vicent","Luccie",
                 "Yua","Eri","Adelaide","James","Ravi Garcia Junior","Raimundo Miller","Alessa Olgimskaya","Orpioxious S. Cupre"
             ];
-
+    
             let inContestants = false;
             let contestantIndex = 0;
-
+    
             document.addEventListener("keydown", function(e) {
                 if (biosDiv.style.display === "block") {
                     if (!inContestants) {
-                        // Navegação no menu principal
                         if (e.key === "ArrowDown") {
                             menuItems[selectedIndex].classList.remove("selected");
                             selectedIndex = (selectedIndex + 1) % menuItems.length;
@@ -324,7 +323,6 @@
                         }
                         if (e.key === "Enter") {
                             if (selectedIndex === 0) {
-                                // Entrar na lista de contestantes
                                 inContestants = true;
                                 contestantIndex = 0;
                                 mostrarContestantes();
@@ -335,7 +333,6 @@
                             }
                         }
                     } else {
-                        // Navegação dentro dos contestantes
                         const listItems = document.querySelectorAll(".contestants-list li");
                         if (e.key === "ArrowDown") {
                             listItems[contestantIndex].classList.remove("selected");
@@ -357,36 +354,123 @@
                     }
                 }
             });
-
+    
             function mostrarContestantes() {
                 biosContent.innerHTML = "<ul class='contestants-list'>" +
                     contestants.map((c, i) => `<li class="${i===0?'selected':''}">${c}</li>`).join("") +
                     "</ul><p>(Use ↑ ↓ e Enter, ESC para voltar)</p>";
             }
-
+    
             function mostrarPerfil(nome) {
-                // gera o arquivo da imagem a partir do primeiro nome, sem acento e em minúsculas
-                const primeiro = nome.split(" ")[0]
-                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase();
-                const imgNome = `${primeiro}.png`;
-
-                biosContent.innerHTML = `
-                    <div class="profile">
-                        <div class="photo-box">
-                            <img src="${imgNome}" alt="Foto de ${nome}"
-                                 onerror="this.parentNode.textContent='FOTO'; this.remove();">
-                        </div>
-                        <div>
-                            <p><strong>Nome:</strong> ${nome}</p>
-                            <p><strong>Informações:</strong> [A definir]</p>
-                            <p><strong>Objetivo:</strong> [A definir]</p>
-                            <p>(Pressione ESC para voltar)</p>
-                        </div>
-                    </div>
-                `;
+                switch(nome) {
+                    case "Coralina":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="coralina.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Coralina</p></div>
+                            </div>`;
+                        break;
+                    case "Antúan":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="antuan.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Antúan</p></div>
+                            </div>`;
+                        break;
+                    case "Ludovico":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="ludovico.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Ludovico</p></div>
+                            </div>`;
+                        break;
+                    case "Hector Bogey":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="hector.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Hector Bogey</p></div>
+                            </div>`;
+                        break;
+                    case "Minnerva":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="minnerva.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Minnerva</p></div>
+                            </div>`;
+                        break;
+                    case "Lindi Vicent":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="lindi.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Lindi Vicent</p></div>
+                            </div>`;
+                        break;
+                    case "Luccie":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="luccie.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Luccie</p></div>
+                            </div>`;
+                        break;
+                    case "Yua":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="yua.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Yua</p></div>
+                            </div>`;
+                        break;
+                    case "Eri":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="eri.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Eri</p></div>
+                            </div>`;
+                        break;
+                    case "Adelaide":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="adelaide.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Adelaide</p></div>
+                            </div>`;
+                        break;
+                    case "James":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="james.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> James</p></div>
+                            </div>`;
+                        break;
+                    case "Ravi Garcia Junior":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="ravi.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Ravi Garcia Junior</p></div>
+                            </div>`;
+                        break;
+                    case "Raimundo Miller":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="raimundo.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Raimundo Miller</p></div>
+                            </div>`;
+                        break;
+                    case "Alessa Olgimskaya":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="alessa.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Alessa Olgimskaya</p></div>
+                            </div>`;
+                        break;
+                    case "Orpioxious S. Cupre":
+                        biosContent.innerHTML = `
+                            <div class="profile">
+                                <div class="photo-box"><img src="orpioxious.png" width="80" height="100"></div>
+                                <div><p><strong>Nome:</strong> Orpioxious S. Cupre</p></div>
+                            </div>`;
+                        break;
+                }
             }
         }
-    </script>
+</script>
 </body>
 </html>
