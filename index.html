@@ -161,6 +161,15 @@
             align-items: center;
             justify-content: center;
             font-size: 10px;
+            overflow: hidden;
+        }
+
+        /* Garantir que a imagem ocupe o box corretamente */
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         /* Centraliza a tela de login */
@@ -240,7 +249,11 @@
             if (event.key === "Enter") {
                 if (bloqueio && Date.now() < bloqueio) return;
 
-                const valor = input.value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const valor = input.value
+                    .trim()
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
 
                 if (senhaCorreta.includes(valor)) {
                     msg.textContent = "Acesso concedido...";
@@ -287,13 +300,10 @@
             let selectedIndex = 0;
             const biosContent = document.getElementById("bios-content");
 
-                const contestants = [
+            const contestants = [
                 "Coralina","Antúan","Ludovico","Hector Bogey","Minnerva","Lindi Vicent","Luccie",
                 "Yua","Eri","Adelaide","James","Ravi Garcia Junior","Raimundo Miller","Alessa Olgimskaya","Orpioxious S. Cupre"
             ];
-
-
-
 
             let inContestants = false;
             let contestantIndex = 0;
@@ -355,9 +365,18 @@
             }
 
             function mostrarPerfil(nome) {
+                // gera o arquivo da imagem a partir do primeiro nome, sem acento e em minúsculas
+                const primeiro = nome.split(" ")[0]
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase();
+                const imgNome = `${primeiro}.png`;
+
                 biosContent.innerHTML = `
                     <div class="profile">
-                        <div class="photo-box">FOTO</div>
+                        <div class="photo-box">
+                            <img src="${imgNome}" alt="Foto de ${nome}"
+                                 onerror="this.parentNode.textContent='FOTO'; this.remove();">
+                        </div>
                         <div>
                             <p><strong>Nome:</strong> ${nome}</p>
                             <p><strong>Informações:</strong> [A definir]</p>
@@ -371,4 +390,3 @@
     </script>
 </body>
 </html>
-
